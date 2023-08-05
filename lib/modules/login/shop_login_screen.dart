@@ -1,10 +1,13 @@
+import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ishopit/layout/shop_layout.dart';
 import 'package:ishopit/modules/login/cubit/cubit.dart';
 import 'package:ishopit/modules/login/cubit/state.dart';
 import 'package:ishopit/modules/register/register_screen.dart';
 import 'package:ishopit/shared/components/components.dart';
+import 'package:ishopit/shared/network/local/cache_helper.dart';
 import 'package:ishopit/shared/style/colors.dart';
 
 class ShopLoginScreen extends StatelessWidget {
@@ -18,14 +21,31 @@ class ShopLoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => ShopLoginCubit(),
       child: BlocConsumer<ShopLoginCubit, ShopLoginStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is ShopLoginSuccessState) {
+            if (state.loginModel.status == true) {
+              CacheHelper.saveData(
+                  key: 'token', value: state.loginModel.data!.token).then((
+                  value) {
+                if (value) navPushAndFinish(context, ShopLayout());
+              });
+            } else {
+              customFlutterToast(
+                context: context,
+                text: '${state.loginModel.message}',
+                color: Colors.red,
+                icon: Icons.error_outline,
+              );
+            }
+          }
+        },
         builder: (context, state) {
-          var cubit = ShopLoginCubit().get(context);
+          var cubit = ShopLoginCubit.get(context);
           return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Center(
-                child: SingleChildScrollView(
+            body: Center(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
                   child: Form(
                     key: formKey,
                     child: Column(
@@ -45,8 +65,8 @@ class ShopLoginScreen extends StatelessWidget {
                         Text(
                           'Login To Browse Our Hot Offers',
                           style: TextStyle(fontSize: 18, color: Colors.grey
-                              //fontWeight: FontWeight.bold,
-                              ),
+                            //fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(
                           height: 30,
@@ -80,13 +100,7 @@ class ShopLoginScreen extends StatelessWidget {
                           suffpressd: () {
                             cubit.ChangeVisibility();
                           },
-                          onSubmit: (value) {},
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        defaultBotton(
-                          function: () {
+                          onSubmit: (value) {
                             if (formKey.currentState!.validate()) {
                               cubit.LoginUser(
                                 email: emailController.text,
@@ -94,11 +108,32 @@ class ShopLoginScreen extends StatelessWidget {
                               );
                             }
                           },
-                          text: 'login',
-                          width: double.infinity,
-                          radius: 20,
-                          isUpperCase: true,
-                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        ConditionalBuilder(
+                          condition: state is! ShopLoginLoadingState,
+                          builder: (context) =>
+                              defaultBotton(
+                                function: () {
+                                  if (formKey.currentState!.validate()) {
+                                    cubit.LoginUser(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                    );
+                                  }
+                                },
+                                text: 'login',
+                                width: double.infinity,
+                                radius: 0,
+                                isUpperCase: true,
+                                color: Colors.white,
+                              ),
+                          fallback: (context) =>
+                              Center(
+                                child: CircularProgressIndicator(),
+                              ),
                         ),
                         SizedBox(
                           height: 10,

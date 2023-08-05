@@ -1,11 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ishopit/shared/style/colors.dart';
 
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
-import '../network/local/cache_helper.dart';
 
 Widget defaultFormField({
   required TextEditingController controller,
@@ -22,42 +19,37 @@ Widget defaultFormField({
   Function()? suffpressd,
   //required String text,
 }) =>
-    BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return TextFormField(
-          controller: controller,
-          keyboardType: type,
-          onFieldSubmitted: onSubmit,
-          onChanged: onChange,
-          validator: validate,
-          obscureText: obscureText,
-          onTap: onTap,
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              prefIcon,
-            ),
-            suffixIcon: IconButton(
-              onPressed: suffpressd,
-              icon: Icon(
-                suffIcon,
-              ),
-            ),
-            labelText: label,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(radius),
-              gapPadding: 10,
-            ),
+    TextFormField(
+      controller: controller,
+      keyboardType: type,
+      onFieldSubmitted: onSubmit,
+      onChanged: onChange,
+      validator: validate,
+      obscureText: obscureText,
+      onTap: onTap,
+      decoration: InputDecoration(
+        prefixIcon: Icon(
+          prefIcon,
+        ),
+        suffixIcon: IconButton(
+          onPressed: suffpressd,
+          icon: Icon(
+            suffIcon,
           ),
-        );
-      },
+        ),
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radius),
+          gapPadding: 10,
+        ),
+      ),
     );
 
 Widget defaultTexButton({
   required Function() function,
   required String text,
-
-})=>TextButton(onPressed: function, child: Text(text.toUpperCase()));
+}) =>
+    TextButton(onPressed: function, child: Text(text.toUpperCase()));
 
 Widget defaultBotton({
   double width = 200,
@@ -141,4 +133,49 @@ class ImageBuilder extends StatelessWidget {
       height: imgheight,
     );
   }
+}
+
+void customFlutterToast({
+  required BuildContext context,
+  required String text,
+  required Color color,
+  Color textColor = Colors.white,
+  int duration = 3,
+  ToastGravity gravity = ToastGravity.BOTTOM,
+  required IconData icon,
+  Color iconColor = Colors.white,
+  double radius = 40,
+}) {
+  FToast fToast = FToast();
+  fToast.init(context);
+  Widget toast = Container(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(radius),
+      color: color,
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Icon(
+          icon,
+          color: iconColor,
+        ),
+        SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: textColor,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+  fToast.showToast(
+    child: toast,
+    toastDuration: Duration(seconds: duration),
+    gravity: gravity,
+  );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ishopit/modules/login/shop_login_screen.dart';
 import 'package:ishopit/shared/components/components.dart';
+import 'package:ishopit/shared/network/local/cache_helper.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class boardingModel {
@@ -47,7 +48,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              navPush(context, ShopLoginScreen());
+              CacheHelper.saveData(key: 'skip', value: true).then((value) {
+                if (value) navPushAndFinish(context, ShopLoginScreen());
+              });
             },
             child: Text('SKIP'),
           ),
@@ -71,30 +74,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 itemCount: 3,
               ),
             ),
-            SizedBox(height: 40,),
+            SizedBox(
+              height: 40,
+            ),
             Row(
               children: [
                 SmoothPageIndicator(
                   controller: boardController,
                   count: onboarding.length,
                   effect: ExpandingDotsEffect(
-                    dotHeight: 15,
-                    dotWidth: 15,
-                    spacing: 5,
-                    activeDotColor: Colors.blue,
-                    expansionFactor: 3
-                  ),
+                      dotHeight: 15,
+                      dotWidth: 15,
+                      spacing: 5,
+                      activeDotColor: Colors.blue,
+                      expansionFactor: 3),
                 ),
                 Spacer(),
                 FloatingActionButton(
                   onPressed: () {
-                    if(index < onboarding.length - 1) {
+                    if (index < onboarding.length - 1) {
                       boardController.nextPage(
                         duration: Duration(seconds: 1),
                         curve: Curves.fastOutSlowIn,
                       );
-                    }else {
-                      navPush(context, ShopLoginScreen());
+                    } else {
+                      CacheHelper.saveData(key: 'skip', value: true)
+                          .then((value) {
+                        if (value) navPushAndFinish(context, ShopLoginScreen());
+                      });
                     }
                   },
                   child: Icon(Icons.arrow_forward_ios),

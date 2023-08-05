@@ -20,7 +20,7 @@ void main() async {
   DioHelper.init();
   await CacheHelper.init();
   bool skip = CacheHelper.getData(key: 'skip');
-  String token = CacheHelper.getData(key: 'token');
+  token = CacheHelper.getData(key: 'token');
   Widget widget;
 
   if (skip!=null) {
@@ -28,15 +28,15 @@ void main() async {
     else widget = ShopLoginScreen();
   }else widget = OnboardingScreen();
 
-  runApp(MyApp(skip: skip,startWidget: widget, token: token,));
+  runApp(MyApp(skip: skip,startWidget: widget,));
 }
 
 class MyApp extends StatelessWidget {
   final bool skip;
   final Widget startWidget;
-  final String token;
 
-  MyApp({required this.skip, required this.startWidget, required this.token,});
+
+  MyApp({required this.skip, required this.startWidget,});
 
 
   // This widget is the root of your application.
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AppCubit(),
         ),
-        BlocProvider(create: (context) => ShopCubit()..GetHomeData(token: token),)
+        BlocProvider(create: (context) => ShopCubit()..GetHomeData(),)
       ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},

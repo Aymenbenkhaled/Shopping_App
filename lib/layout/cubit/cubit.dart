@@ -7,6 +7,7 @@ import 'package:ishopit/modules/categories/categories_screen.dart';
 import 'package:ishopit/modules/favorites/favorites_screen.dart';
 import 'package:ishopit/modules/products/products_screen.dart';
 import 'package:ishopit/modules/settings/settings_screen.dart';
+import 'package:ishopit/shared/components/constants.dart';
 import 'package:ishopit/shared/network/endpoints.dart';
 import 'package:ishopit/shared/network/remote/dio_helper.dart';
 
@@ -31,7 +32,7 @@ class ShopCubit extends Cubit<ShopStates> {
 
   HomeModel? homeModel;
 
-  void GetHomeData({required token}) {
+  void GetHomeData() {
     emit(ShopGetHomeDataLoadingState());
     DioHelper.getData(url: HOME, token: token)
         .then((value) {

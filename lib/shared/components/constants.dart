@@ -4,4 +4,4 @@
 
 import 'package:ishopit/shared/network/local/cache_helper.dart';
 
-//String TOKEN = '';
+String token = '';

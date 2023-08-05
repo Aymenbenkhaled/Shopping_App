@@ -46,7 +46,7 @@ class ProductModel {
   String? image;
   String? name;
   String? description;
-  List<dynamic>? images;
+  //List<dynamic>? images;
   bool? in_favorites;
   bool? in_cart;
 
@@ -58,7 +58,7 @@ class ProductModel {
     image = json['image'];
     name = json['name'];
     description = json['description'];
-    images = json['images'];
+    //images = json['images'];
     in_favorites = json['in_favorites'];
     in_cart = json['in_cart'];
   }

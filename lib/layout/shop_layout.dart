@@ -34,8 +34,7 @@ class ShopLayout extends StatelessWidget {
               if (cubit.index != 3)
                 IconButton(
                     onPressed: () {
-                      cubit.changeLang();
-                      //navPush(context, SearchScreen());
+                      navPush(context, SearchScreen());
                     },
                     icon: Icon(Icons.search)),
               if (cubit.index == 3)
@@ -47,6 +46,12 @@ class ShopLayout extends StatelessWidget {
                   },
                   text: 'logout',
                 ),
+              IconButton(
+                onPressed: () {
+                  cubit.changeLang();
+                },
+                icon: Icon(Icons.language),
+              ),
               IconButton(
                 onPressed: () {
                   cubit.changeDarkLight();

@@ -52,4 +52,23 @@ class DioHelper {
       data: data,
     );
   }
+
+  static Future<Response> putData({
+    required String url,
+    required Map<String, dynamic> data,
+    Map<String, dynamic>? query,
+    String? lang = 'en',
+    String? token,
+  }) {
+    dio!.options.headers = {
+      'lang': lang,
+      'Content-Type': 'application/json',
+      'authorization': token,
+    };
+    return dio!.put(
+      url,
+      queryParameters: query,
+      data: data,
+    );
+  }
 }

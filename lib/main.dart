@@ -20,24 +20,43 @@ void main() async {
   DioHelper.init();
   await CacheHelper.init();
   bool skip = CacheHelper.getData(key: 'skip');
+
   token = CacheHelper.getData(key: 'token');
+  CacheHelper.removeData(key: 'DarkLight');
+  bool DarkLight = CacheHelper.getData(key: 'DarkLight');
+  print(DarkLight);
+  if (DarkLight == null) DarkLight = true;
+
+  lang = CacheHelper.getData(key: 'lang');
+  lang == null ? lang = 'en' : '';
+  //print('laaaaaaaang :  $lang');
   Widget widget;
 
-  if (skip!=null) {
-    if (token!=null) widget = ShopLayout();
-    else widget = ShopLoginScreen();
-  }else widget = OnboardingScreen();
+  if (skip != null) {
+    if (token != null)
+      widget = ShopLayout();
+    else
+      widget = ShopLoginScreen();
+  } else
+    widget = OnboardingScreen();
 
-  runApp(MyApp(skip: skip,startWidget: widget,));
+  runApp(MyApp(
+    DarkLight: DarkLight,
+    skip: skip,
+    startWidget: widget,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final bool skip;
+  final bool DarkLight;
   final Widget startWidget;
 
-
-  MyApp({required this.skip, required this.startWidget,});
-
+  MyApp({
+    required this.skip,
+    required this.DarkLight,
+    required this.startWidget,
+  });
 
   // This widget is the root of your application.
   @override
@@ -47,7 +66,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AppCubit(),
         ),
-        BlocProvider(create: (context) => ShopCubit()..GetHomeData(),)
+        BlocProvider(
+            create: (context) => ShopCubit()
+              ..GetHomeData()
+              ..GetCategories()
+              ..GetFavorites()
+              ..GetUserData())
       ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
@@ -57,7 +81,7 @@ class MyApp extends StatelessWidget {
             title: 'Flutter Demo',
             theme: LightTheme,
             darkTheme: DarkTheme,
-            themeMode: ThemeMode.light,
+            themeMode: DarkLight == true ? ThemeMode.light : ThemeMode.dark,
             home: startWidget,
           );
         },

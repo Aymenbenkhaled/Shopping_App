@@ -20,6 +20,7 @@ Widget defaultFormField({
   //required String text,
 }) =>
     TextFormField(
+
       controller: controller,
       keyboardType: type,
       onFieldSubmitted: onSubmit,
@@ -135,7 +136,7 @@ class ImageBuilder extends StatelessWidget {
   }
 }
 
-void customFlutterToast({
+void CustomFlutterToast({
   required BuildContext context,
   required String text,
   required Color color,

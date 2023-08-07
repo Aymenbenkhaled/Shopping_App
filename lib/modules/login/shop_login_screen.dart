@@ -7,6 +7,7 @@ import 'package:ishopit/modules/login/cubit/cubit.dart';
 import 'package:ishopit/modules/login/cubit/state.dart';
 import 'package:ishopit/modules/register/register_screen.dart';
 import 'package:ishopit/shared/components/components.dart';
+import 'package:ishopit/shared/components/constants.dart';
 import 'package:ishopit/shared/network/local/cache_helper.dart';
 import 'package:ishopit/shared/style/colors.dart';
 
@@ -27,10 +28,11 @@ class ShopLoginScreen extends StatelessWidget {
               CacheHelper.saveData(
                   key: 'token', value: state.loginModel.data!.token).then((
                   value) {
+                    token = state.loginModel.data!.token!;
                 if (value) navPushAndFinish(context, ShopLayout());
               });
             } else {
-              customFlutterToast(
+              CustomFlutterToast(
                 context: context,
                 text: '${state.loginModel.message}',
                 color: Colors.red,
@@ -78,7 +80,7 @@ class ShopLoginScreen extends StatelessWidget {
                           prefIcon: Icons.email_outlined,
                           validate: (value) {
                             if (value!.isEmpty) {
-                              return 'Please Enter You Email Adress';
+                              return 'Please Enter Your Email Address';
                             }
                           },
                         ),
@@ -92,7 +94,7 @@ class ShopLoginScreen extends StatelessWidget {
                           prefIcon: Icons.password,
                           validate: (value) {
                             if (value!.isEmpty) {
-                              return 'Please Enter You Email Adress';
+                              return 'Please Enter Your Password';
                             }
                           },
                           obscureText: cubit.obscure,

@@ -19,6 +19,7 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   await CacheHelper.init();
+  //CacheHelper.removeData(key: 'skip');
   bool skip = CacheHelper.getData(key: 'skip');
 
   token = CacheHelper.getData(key: 'token');

@@ -37,27 +37,31 @@ class ShopLayout extends StatelessWidget {
                       navPush(context, SearchScreen());
                     },
                     icon: Icon(Icons.search)),
-              if (cubit.index == 3)
-                defaultTexButton(
-                  function: () {
-                    CacheHelper.sharedPreferences!.remove('token').then(
-                        (value) =>
-                            navPushAndFinish(context, ShopLoginScreen()));
+              SubmenuButton(
+                //trailingIcon: Icon(Icons.ac_unit_outlined),
+                  menuChildren: [
+                if (cubit.index == 3)
+                  defaultTexButton(
+                    function: () {
+                      CacheHelper.sharedPreferences!.remove('token').then(
+                          (value) =>
+                              navPushAndFinish(context, ShopLoginScreen()));
+                    },
+                    text: 'logout',
+                  ),
+                IconButton(
+                  onPressed: () {
+                    cubit.changeLang();
                   },
-                  text: 'logout',
+                  icon: Icon(Icons.language),
                 ),
-              IconButton(
-                onPressed: () {
-                  cubit.changeLang();
-                },
-                icon: Icon(Icons.language),
-              ),
-              IconButton(
-                onPressed: () {
-                  cubit.changeDarkLight();
-                },
-                icon: Icon(Icons.dark_mode),
-              )
+                IconButton(
+                  onPressed: () {
+                    cubit.changeDarkLight();
+                  },
+                  icon: Icon(Icons.dark_mode),
+                )
+              ], child: Icon(Icons.menu)),
             ],
           ),
           body: cubit.screensList[cubit.index],
